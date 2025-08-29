@@ -74,7 +74,7 @@ def handle_message(event):
 
 def main():
     print("Hello from f1-broadcast!")
-    uvicorn.run('main:app', port=5000, log_level = 'info')
+    uvicorn.run('main:app', port=8080, log_level = 'info')
 
 if __name__ == "__main__":
     main()
