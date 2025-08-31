@@ -15,4 +15,4 @@ COPY . .
 
 # Cloud Run 會將 PORT 環境變數注入到容器中
 # CMD 指令將使用這個變數來啟動 Uvicorn 伺服器
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT}"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
