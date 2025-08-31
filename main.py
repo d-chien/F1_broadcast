@@ -17,6 +17,7 @@ from linebot.v3.webhooks import (
     MessageEvent,
     TextMessageContent
 )
+import uvicorn
 
 from dotenv import load_dotenv
 
@@ -28,7 +29,7 @@ LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 
 
 
-configuration = Configuration(access_token='YOUR_CHANNEL_ACCESS_TOKEN')
+configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 app = FastAPI()
