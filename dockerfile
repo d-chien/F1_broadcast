@@ -11,7 +11,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 將應用程式程式碼複製到工作目錄
 COPY . .
 
-#EXPOSE 8080
+EXPOSE 8080
 
 # 設定啟動命令
 CMD ["python","app.py"]
