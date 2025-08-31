@@ -14,4 +14,4 @@ COPY . .
 EXPOSE 8080
 
 # 設定啟動命令
-CMD ["python","app.py"]
+CMD ["python","main.py"]
