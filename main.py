@@ -20,6 +20,10 @@ from linebot.v3.webhooks import (
 import uvicorn
 
 from dotenv import load_dotenv
+from loguru import logger
+import sys
+
+logger.add(sys.stderr)
 
 if '.env' in os.listdir():
     load_dotenv()
@@ -33,6 +37,7 @@ configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 app = FastAPI()
+logger.info('webhook all set')
 
 # 處理 LINE Webhook 的主要路由
 @app.post("/callback")
@@ -58,6 +63,7 @@ async def handle_callback(request: Request):
 def handle_message(event):
     # 取得用戶傳送的文字訊息內容
     user_message = event.message.text.strip().lower()
+    logger.info(f'{user_message=}')
     
     # 根據用戶訊息內容，設定不同的回覆
     if "嗨" in user_message or "你好" in user_message:
@@ -71,11 +77,13 @@ def handle_message(event):
         reply_text = f"你傳送了「{user_message}」嗎？這是一段預設的回應。"
     
     # 回覆訊息給用戶
+    logger.info(f'{reply_text=}')
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
+    logger.success('msg sent')
 
-# def main():
-#     print("Hello from f1-broadcast!")
-#     uvicorn.run('main:app', port=8080, log_level = 'info')
+def main():
+    print("Hello from f1-broadcast!")
+    uvicorn.run('main:app', port=8080, log_level = 'info')
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
