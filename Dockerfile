@@ -14,4 +14,4 @@ COPY . .
 EXPOSE 8080
 
 # 設定啟動命令
-CMD ["python","main.py"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT}"]

@@ -73,9 +73,9 @@ def handle_message(event):
     # 回覆訊息給用戶
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
 
-def main():
-    print("Hello from f1-broadcast!")
-    uvicorn.run('main:app', port=8080, log_level = 'info')
+# def main():
+#     print("Hello from f1-broadcast!")
+#     uvicorn.run('main:app', port=8080, log_level = 'info')
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
