@@ -12,7 +12,7 @@ def get_next_game()->str:
     logger.info(f'current time: {today}')
 
     try:
-        schedule = fastf1.get_event_schedule(2025).sort_values('EventDate')
+        schedule = fastf1.get_event_schedule(today.year).sort_values('EventDate')
         next_game = schedule.loc[schedule.EventDate>=today].iloc[0].to_dict()
         for k,v in next_game.items():
             try:
@@ -34,5 +34,32 @@ def get_next_game()->str:
     except Exception as e:
         logger.error(f'get_next_game error: {e}')
 
+def last_session_result()->str:
+    '''
+    by overview the last session result, return the result of last one
+    '''
+
+    today = datetime.now()
+    logger.info(f'current time: {today}')
+
+    try:
+        schedule = fastf1.get_event_schedule(today.year).sort_values('EventDate')
+        lstGame = schedule.loc[schedule.EventDate<=today].iloc[-1].to_dict()
+        session = fastf1.get_session(today.year, lstGame['RoundNumber'],'R')
+        logger.info(f'get session: {today.year} round {lstGame["RoundNumber"]}')
+        session.load()
+        result = session.results
+        logger.info('session load completed')
+
+        data = result.loc[result.Position<=10,['BroadcastName','TeamName','ClassifiedPosition','Time']]
+        pprint(data)
+        logger.info('data retrieved')
+
+
+    except Exception as e:
+        logger.error(f'last_session_result error: {e}')
+
+
+
 if __name__ == '__main__':
-    get_next_game()
+    last_session_result()

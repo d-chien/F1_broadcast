@@ -91,10 +91,10 @@ def broadcast():
     global send_count, MAX_SENDS
     
     # 檢查是否已達到發送上限
-    if send_count >= MAX_SENDS:
-        logger.warning(f"已達到發送上限 {MAX_SENDS} 次，停止排程。")
-        schedule.clear() # 清除所有排程任務
-        return
+    # if send_count >= MAX_SENDS:
+    #     logger.warning(f"已達到發送上限 {MAX_SENDS} 次，停止排程。")
+    #     schedule.clear() # 清除所有排程任務
+    #     return
 
     msg = get_next_game()
     try:
@@ -122,7 +122,10 @@ def broadcast():
     send_count+=1
 
 def schedule_thread():
-    schedule.every().minutes.do(broadcast)
+    # when on first time
+    broadcast()
+    # schedule every monday
+    schedule.every().monday.at('09:00').do(broadcast)
     logger.info('scheduled project done')
 
     while True:
