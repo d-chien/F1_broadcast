@@ -163,5 +163,5 @@ def main():
     print("Hello from f1-broadcast!")
     uvicorn.run('main:app', port=8080, log_level = 'info')
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     # main()
