@@ -1,4 +1,5 @@
 import os
+import time
 from fastapi import FastAPI, Request, HTTPException, Response
 from linebot.v3 import (
     WebhookHandler
@@ -25,6 +26,8 @@ import sys
 
 from threading import Thread
 import schedule
+import requests
+import json
 
 # logger.add(sys.stderr)   # 似乎已經會預設加上了，所以先移除
 
