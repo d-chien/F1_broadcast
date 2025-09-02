@@ -117,6 +117,8 @@ def broadcast():
     except Exception as e:
         logger.error(f'Broadcast Error: {e}')
 
+    send_count+=1
+
 def schedule_thread():
     schedule.every().minutes.do(broadcast)
     logger.info('scheduled project done')
