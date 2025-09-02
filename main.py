@@ -29,6 +29,8 @@ import schedule
 import requests
 import json
 
+from f1_data import get_next_game
+
 # logger.add(sys.stderr)   # 似乎已經會預設加上了，所以先移除
 
 if '.env' in os.listdir():
@@ -38,7 +40,7 @@ LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
 LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 
 send_count = 0
-MAX_SENDS = 2
+MAX_SENDS = 1
 
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
@@ -94,7 +96,7 @@ def broadcast():
         schedule.clear() # 清除所有排程任務
         return
 
-    msg = f'test broadcast {send_count=}'
+    msg = get_next_game()
     try:
         url = 'https://api.line.me/v2/bot/message/broadcast'
 
@@ -162,4 +164,4 @@ def main():
     uvicorn.run('main:app', port=8080, log_level = 'info')
 
 if __name__ == "__main__":
-    main()
+    # main()
