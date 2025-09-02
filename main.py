@@ -40,21 +40,26 @@ app = FastAPI()
 logger.info('webhook all set')
 
 # 處理 LINE Webhook 的主要路由
-@app.route("/callback", methods=['POST'])
-def callback():
+@app.post("/callback")
+async def callback(request: Request):
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
+    if signature is None:
+        raise HTTPException(status_code=400, detail="X-Line-Signature header is missing.")
 
     # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    body = await request.body()
+    # app.logger.info("Request body: " + body)
+    logger.info(f'Request body: {body.decode()}')
 
     # handle webhook body
     try:
-        handler.handle(body, signature)
+        handler.handle(body.decode(), signature)
     except InvalidSignatureError:
-        app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
-        abort(400)
+        # app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
+        # abort(400)
+        logger.error("Invalid signature. Please check your channel access token/channel secret.")
+        raise HTTPException(status_code=400, detail="Invalid signature")
 
     return 'OK'
 
