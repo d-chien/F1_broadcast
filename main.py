@@ -23,7 +23,10 @@ from dotenv import load_dotenv
 from loguru import logger
 import sys
 
-logger.add(sys.stderr)
+from threading import Thread
+import schedule
+
+# logger.add(sys.stderr)   # 似乎已經會預設加上了，所以先移除
 
 if '.env' in os.listdir():
     load_dotenv()
@@ -31,6 +34,8 @@ if '.env' in os.listdir():
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
 LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 
+send_count = 0
+MAX_SENDS = 5
 
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
@@ -74,6 +79,56 @@ def handle_message(event):
                 messages=[TextMessage(text=event.message.text)]
             )
         )
+
+
+# Broadcast Message
+def broadcast():
+    global send_count, MAX_SENDS
+    
+    # 檢查是否已達到發送上限
+    if send_count >= MAX_SENDS:
+        logger.warning(f"已達到發送上限 {MAX_SENDS} 次，停止排程。")
+        schedule.clear() # 清除所有排程任務
+        return
+
+    msg = f'test broadcast {send_count=}'
+    try:
+        url = 'https://api.line.me/v2/bot/message/broadcast'
+
+        headers = {
+            'Content-Type':'application/json',
+            'Authorization':f"Bearer {LINE_CHANNEL_ACCESS_TOKEN}"
+        }
+        data = {
+            'messages':[
+                {
+                    'type':'text',
+                    'text':msg
+                }
+            ]
+        }
+        res = requests.post(url, headers = headers, data = json.dumps(data))
+        res.raise_for_status()
+        logger.success(f'Broadcast: {msg}')
+
+    except Exception as e:
+        logger.error(f'Broadcast Error: {e}')
+
+def schedule_thread():
+    schedule.every().minutes.do(broadcast)
+    logger.info('scheduled project done')
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+@app.on_event("startup")
+async def startup_event():
+    thread = Thread(target=schedule_thread)
+    thread.daemon = True # 確保主程式結束時執行緒也會結束
+    thread.start()
+    logger.info("排程執行緒已啟動！")
+
 
 # @handler.add(MessageEvent, message=TextMessage)
 # def handle_message(event):
