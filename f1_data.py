@@ -25,11 +25,11 @@ def get_next_game()->str:
 
         # format return data
         output_str = \
-            f"""下一場F1大獎賽是 {next_game['EventName']}，是今年的第{next_game['RoundNumber']}輪競賽，比賽時間如下：\n
-            練習賽：{next_game['Session1Date']}, {next_game['Session2Date']}, {next_game['Session3Date']}\n
-            排位賽：{next_game['Session4Date']}\n
-            正賽：{next_game['Session5Date']}\n"""
-        pprint(output_str)
+            f"""下一場F1大獎賽是 {next_game['EventName']}，是今年的第{next_game['RoundNumber']}輪競賽，比賽時間如下：
+練習賽：{next_game['Session1Date']}, {next_game['Session2Date']}, {next_game['Session3Date']}
+排位賽：{next_game['Session4Date']}
+正賽：{next_game['Session5Date']}"""
+        print(output_str)
         return output_str
     except Exception as e:
         logger.error(f'get_next_game error: {e}')
