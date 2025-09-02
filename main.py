@@ -38,7 +38,7 @@ LINE_CHANNEL_ACCESS_TOKEN = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
 LINE_CHANNEL_SECRET = os.getenv('LINE_CHANNEL_SECRET')
 
 send_count = 0
-MAX_SENDS = 5
+MAX_SENDS = 2
 
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
