@@ -119,7 +119,7 @@ def broadcast():
     except Exception as e:
         logger.error(f'Broadcast Error: {e}')
 
-    send_count+=1
+    # send_count+=1
 
 def schedule_thread():
     # when on first time
