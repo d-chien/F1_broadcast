@@ -149,7 +149,7 @@ def broadcast():
 
 def schedule_thread():
     # when on first time
-    broadcast()
+    # broadcast()
     # schedule every monday
     schedule.every().monday.at('01:00').do(broadcast)   # system use UTC time, so in my laziness, I choose an easy way to let it broadcast at 9.
     logger.info('scheduled project done')
@@ -166,27 +166,6 @@ async def startup_event():
     logger.info("排程執行緒已啟動！")
 
 
-# @handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     # 取得用戶傳送的文字訊息內容
-#     user_message = event.message.text.strip().lower()
-#     logger.info(f'{user_message=}')
-    
-#     # 根據用戶訊息內容，設定不同的回覆
-#     if "嗨" in user_message or "你好" in user_message:
-#         reply_text = "嗨！您好！很高興與您對話！"
-#     elif "天氣" in user_message:
-#         reply_text = "目前我還無法查詢天氣，但很高興你問我！"
-#     elif "貓" in user_message:
-#         reply_text = "我喜歡貓咪！你有養嗎？"
-#     else:
-#         # 如果沒有符合的關鍵字，就回覆預設內容
-#         reply_text = f"你傳送了「{user_message}」嗎？這是一段預設的回應。"
-    
-#     # 回覆訊息給用戶
-#     logger.info(f'{reply_text=}')
-#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_text))
-#     logger.success('msg sent')
 
 def main():
     print("Hello from f1-broadcast!")
