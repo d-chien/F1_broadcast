@@ -5,6 +5,8 @@ from pprint import pprint
 import pandas as pd
 from fastf1.livetiming.data import LiveTimingData
 
+fastf1.Cache.enable_cache('Cache')
+
 def get_next_game()->str:
     '''
     base on current time get next game time and info
@@ -56,11 +58,15 @@ def last_session_result()->str:
         data = result.loc[result.Position<=10,['BroadcastName','TeamName','ClassifiedPosition','Time']]
         pprint(data)
         logger.info('data retrieved')
+        ttl_sec = pd.to_timedelta(data.loc[data.ClassifiedPosition=='1','Time'].values[0]).total_seconds()
+
         output_str = f'''前場賽事 {lstGame['EventName'].replace('Grand Prix','GP')}
-冠軍：{data.loc[data.ClassifiedPosition=='1','TeamName'].values[0]} {data.loc[data.ClassifiedPosition=='1','BroadcastName'].values[0]}
-完賽時間： {data.loc[data.ClassifiedPosition=='1','Time'].values[0].strftime('%H:%M:%S')}
+冠軍：{data.loc[data.ClassifiedPosition=='1','TeamName'].values[0]} || {data.loc[data.ClassifiedPosition=='1','BroadcastName'].values[0]}
+完賽時間： {int(ttl_sec//3600):02}:{int((ttl_sec%3600)//60):02d}:{ttl_sec%60:06.3f}
 '''
         print(output_str)
+        logger.info('完成資料產出')
+        return output_str
 
 
     except Exception as e:
@@ -70,5 +76,4 @@ def last_session_result()->str:
 
 
 if __name__ == '__main__':
-    # last_session_result()
-    livetiming_data()
+    last_session_result()

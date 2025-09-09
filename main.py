@@ -29,7 +29,7 @@ import schedule
 import requests
 import json
 
-from f1_data import get_next_game
+from f1_data import get_next_game, last_session_result
 
 # logger.add(sys.stderr)   # 似乎已經會預設加上了，所以先移除
 
@@ -76,14 +76,40 @@ async def callback(request: Request):
 # 處理所有訊息事件，特別是文字訊息
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    with ApiClient(configuration) as api_client:
-        line_bot_api = MessagingApi(api_client)
-        line_bot_api.reply_message_with_http_info(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)]
+    logger.info(f'reply token: {event.reply_token}')
+    logger.info(f'msg received: {event.message.text}')
+
+
+    if '前場' in event.message.text:
+        logger.info(f'獲取前場賽事資訊')
+        try:
+            return_msg = last_session_result()
+            logger.success(f'獲取前場賽事資訊完成')
+        except Exception as e:
+            logger.error(f'獲取前場賽事資訊錯誤:{e}')
+            return_msg = '資料獲取失敗，請稍後再行嘗試，非常抱歉！'
+        
+        try:
+            with ApiClient(configuration) as api_client:
+                line_bot_api = MessagingApi(api_client)
+                line_bot_api.reply_message_with_http_info(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[TextMessage(text=return_msg)]
+                    )
+                )
+            logger.success(f'{return_msg=}')
+        except Exception as e:
+            logger.error(f'return failed: {e}')
+    else:
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=event.message.text)]
+                )
             )
-        )
 
 
 # Broadcast Message
