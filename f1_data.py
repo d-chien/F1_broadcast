@@ -5,7 +5,7 @@ from pprint import pprint
 import pandas as pd
 from fastf1.livetiming.data import LiveTimingData
 
-fastf1.Cache.enable_cache('Cache')
+# fastf1.Cache.enable_cache('Cache')
 
 def get_next_game()->str:
     '''

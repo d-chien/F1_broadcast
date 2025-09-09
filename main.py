@@ -79,7 +79,7 @@ def handle_message(event):
     logger.info(f'reply token: {event.reply_token}')
     logger.info(f'msg received: {event.message.text}')
 
-
+    # 前場賽事logic
     if '前場' in event.message.text:
         logger.info(f'獲取前場賽事資訊')
         try:
