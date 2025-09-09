@@ -2,6 +2,8 @@ import fastf1
 from loguru import logger
 from datetime import datetime
 from pprint import pprint
+import pandas as pd
+from fastf1.livetiming.data import LiveTimingData
 
 def get_next_game()->str:
     '''
@@ -54,6 +56,11 @@ def last_session_result()->str:
         data = result.loc[result.Position<=10,['BroadcastName','TeamName','ClassifiedPosition','Time']]
         pprint(data)
         logger.info('data retrieved')
+        output_str = f'''前場賽事 {lstGame['EventName'].replace('Grand Prix','GP')}
+冠軍：{data.loc[data.ClassifiedPosition=='1','TeamName'].values[0]} {data.loc[data.ClassifiedPosition=='1','BroadcastName'].values[0]}
+完賽時間： {data.loc[data.ClassifiedPosition=='1','Time'].values[0].strftime('%H:%M:%S')}
+'''
+        print(output_str)
 
 
     except Exception as e:
@@ -61,5 +68,7 @@ def last_session_result()->str:
 
 
 
+
 if __name__ == '__main__':
-    last_session_result()
+    # last_session_result()
+    livetiming_data()

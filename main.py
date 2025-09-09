@@ -125,7 +125,7 @@ def schedule_thread():
     # when on first time
     broadcast()
     # schedule every monday
-    schedule.every().monday.at('09:00').do(broadcast)
+    schedule.every().monday.at('01:00').do(broadcast)   # system use UTC time, so in my laziness, I choose an easy way to let it broadcast at 9.
     logger.info('scheduled project done')
 
     while True:
