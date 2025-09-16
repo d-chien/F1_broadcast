@@ -103,7 +103,7 @@ def get_last_year_result()->str:
             if ind>=5:
                 break
             else:
-                out_str += f'The {ind+1} place is {data}\n'
+                out_str += f'{ind+1}---{data}\n'
         logger.success(out_str)
         return out_str
     except Exception as e:
