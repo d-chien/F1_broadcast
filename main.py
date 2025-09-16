@@ -29,7 +29,7 @@ import schedule
 import requests
 import json
 
-from f1_data import get_next_game, last_session_result
+from f1_data import *
 
 # logger.add(sys.stderr)   # 似乎已經會預設加上了，所以先移除
 
