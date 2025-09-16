@@ -111,6 +111,38 @@ def handle_message(event):
                 )
             )
 
+    # 前場賽事logic
+    if '去年' in event.message.text:
+        logger.info(f'獲取去年賽事資訊')
+        try:
+            return_msg = get_last_year_result()
+            logger.success(f'獲取去年賽事資訊完成')
+        except Exception as e:
+            logger.error(f'獲取去年賽事資訊錯誤:{e}')
+            return_msg = '資料獲取失敗，請稍後再行嘗試，非常抱歉！'
+        
+        try:
+            with ApiClient(configuration) as api_client:
+                line_bot_api = MessagingApi(api_client)
+                line_bot_api.reply_message_with_http_info(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[TextMessage(text=return_msg)]
+                    )
+                )
+            logger.success(f'{return_msg=}')
+        except Exception as e:
+            logger.error(f'return failed: {e}')
+    else:
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=event.message.text)]
+                )
+            )
+
 
 # Broadcast Message
 def broadcast():

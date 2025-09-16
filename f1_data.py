@@ -16,6 +16,7 @@ def get_next_game()->str:
     '''
     base on current time get next game time and info
     '''
+    logger.info('start get_next_game')
 
     today = datetime.now()
     logger.info(f'current time: {today}')
@@ -47,6 +48,7 @@ def last_session_result()->str:
     '''
     by overview the last session result, return the result of last one
     '''
+    logger.info('start last_session_result')
 
     today = datetime.now()
     logger.info(f'current time: {today}')
@@ -76,9 +78,41 @@ def last_session_result()->str:
 
     except Exception as e:
         logger.error(f'last_session_result error: {e}')
+        raise ValueError(f'last_session_result error: {e}')
+
+def get_last_year_result()->str:
+    '''
+    by datatime, get the last result of last GP in the same place
+    '''
+    logger.info('start get_last_year_result')
+
+    today = datetime.now()
+    logger.info(f'current date: {today}')
+
+    try:
+        lstYr = today.year-1
+        GP = fastf1.get_events_remaining(today).iloc[0]['Country']
+        logger.info(f'get {lstYr} {GP} data')
+        session = fastf1.get_session(lstYr,GP,'R')
+        logger.info('start getting session info')
+        session.load()
+        results = session.results
+        logger.info('finish getting info')
+        out_str = f'The Last {GP} GP result:\n'
+        for ind, data in enumerate(results.BroadcastName):
+            if ind>=5:
+                break
+            else:
+                out_str += f'The {ind+1} place is {data}\n'
+        logger.success(out_str)
+        return out_str
+    except Exception as e:
+        logger.error(f'get_last_year_result error: {e}')
+        return f'error: {e}'
+
 
 
 
 
 if __name__ == '__main__':
-    last_session_result()
+    get_last_year_result()
